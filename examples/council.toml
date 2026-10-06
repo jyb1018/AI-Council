@@ -1,0 +1,36 @@
+# Copy to council.toml. Keep credentials in the official CLIs, never in this file.
+# Relative database paths resolve against this configuration file's directory.
+database = ".council/state.sqlite3"
+max_calls_per_session = 32
+max_concurrency = 3
+max_active_sessions = 2
+session_timeout_seconds = 1800
+max_prompt_chars = 120000
+max_output_bytes = 1048576
+
+[providers.codex]
+kind = "codex"
+enabled = true
+subscription_confirmed = false # Set true only after ChatGPT login and billing review.
+timeout_seconds = 300
+daily_call_limit = 100
+# executable = "/absolute/path/to/codex"
+# model = "an-available-model-from-your-cli"
+
+[providers.claude]
+kind = "claude"
+enabled = true
+subscription_confirmed = false # Use claude auth login, not --console.
+timeout_seconds = 300
+daily_call_limit = 100
+# model = "an-available-model-from-your-cli"
+
+[providers.gemini]
+kind = "antigravity"
+enabled = false # Opt-in: this client inherits local tools/settings.
+subscription_confirmed = false
+allow_inherited_tools = false # Requires an explicit local permission/configuration audit.
+timeout_seconds = 300
+daily_call_limit = 100
+# executable = "/absolute/path/to/agy"
+# model = "an-available-model-from-agy-models"
