@@ -93,6 +93,9 @@ class Council:
         return self.store.status(session_id)
 
     def resume(self, session_id: str, *, accept_duplicate_cost: bool = False) -> dict:
+        active = self.tasks.get(session_id)
+        if active is not None and not active.done():
+            raise CouncilError("still_running", "Wait for cancellation/cleanup to finish before resuming this session.")
         state = self.store.get(session_id)
         if state["status"] not in ("failed", "interrupted", "cancelled"):
             raise CouncilError("not_resumable", "Only failed, interrupted, or cancelled sessions can be resumed.")
