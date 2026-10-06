@@ -51,6 +51,9 @@ class Store:
             self.db.execute("PRAGMA foreign_keys=ON")
             if not read_only:
                 self._initialize()
+        except sqlite3.Error as exc:
+            self.close()
+            raise CouncilError("database", "Cannot open the Council database; check the path, permissions, and file integrity.") from exc
         except BaseException:
             self.close()
             raise
