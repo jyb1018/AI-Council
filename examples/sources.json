@@ -1,0 +1,7 @@
+[
+  {
+    "id": "requirements",
+    "title": "Example project requirements (user supplied, not externally verified)",
+    "content": "The first release serves one local user, requires restart recovery, and must not execute arbitrary commands from MCP inputs."
+  }
+]
