@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ai-council": {
+      "command": "/ABSOLUTE/PATH/AI-Council/.venv/bin/ai-council",
+      "args": ["--config", "/ABSOLUTE/PATH/AI-Council/council.toml", "serve"]
+    }
+  }
+}
