@@ -16,6 +16,7 @@ timeout_seconds = 300
 daily_call_limit = 100
 # executable = "/absolute/path/to/codex"
 # model = "an-available-model-from-your-cli"
+# reasoning_effort = "choose-a-value-advertised-for-this-model"
 
 [providers.claude]
 kind = "claude"
@@ -24,6 +25,7 @@ subscription_confirmed = false # Use claude auth login, not --console.
 timeout_seconds = 300
 daily_call_limit = 100
 # model = "an-available-model-from-your-cli"
+# reasoning_effort = "choose-a-value-advertised-for-this-model"
 
 [providers.gemini]
 kind = "antigravity"
@@ -34,3 +36,4 @@ timeout_seconds = 300
 daily_call_limit = 100
 # executable = "/absolute/path/to/agy"
 # model = "an-available-model-from-agy-models"
+# reasoning_effort = "choose-an-option-from-agy-help"

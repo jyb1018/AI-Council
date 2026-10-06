@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import sys
 import tomllib
 from pathlib import Path
 from typing import Annotated, Literal
@@ -10,7 +11,15 @@ from pydantic import Field, ValidationError, model_validator
 
 from .models import Contract, CouncilError, Identifier
 
-DEFAULT_DB = Path.home() / ".local" / "share" / "ai-council" / "council.sqlite3"
+
+def _default_database(filename: str) -> Path:
+    legacy = Path.home() / ".local" / "share" / "ai-council" / filename
+    if sys.platform != "darwin" or legacy.exists():
+        return legacy
+    return Path.home() / "Library" / "Application Support" / "ai-council" / filename
+
+
+DEFAULT_DB = _default_database("council.sqlite3")
 
 
 class ProviderConfig(Contract):
@@ -18,6 +27,7 @@ class ProviderConfig(Contract):
     enabled: bool = True
     executable: str | None = None
     model: str | None = None
+    reasoning_effort: str | None = None
     timeout_seconds: Annotated[float, Field(ge=1, le=1800)] = 300
     daily_call_limit: Annotated[int, Field(ge=1, le=10000)] = 100
     subscription_confirmed: bool = False
@@ -25,7 +35,7 @@ class ProviderConfig(Contract):
 
     @model_validator(mode="after")
     def validate_strings(self) -> ProviderConfig:
-        for value in (self.executable, self.model):
+        for value in (self.executable, self.model, self.reasoning_effort):
             if value is not None and (not value.strip() or "\x00" in value or len(value) > 1024):
                 raise ValueError("executable/model must be nonempty and contain no NUL")
         return self
@@ -35,7 +45,11 @@ class ProviderConfig(Contract):
         return self.executable or {"antigravity": "agy"}.get(self.kind, self.kind)
 
     def identity(self) -> dict:
-        return {"kind": self.kind, "executable": self.binary, "model": self.model}
+        identity = {"kind": self.kind, "executable": self.binary, "model": self.model}
+        # Preserve fingerprints of v1 sessions which used the CLI default.
+        if self.reasoning_effort is not None:
+            identity["reasoning_effort"] = self.reasoning_effort
+        return identity
 
 
 class Settings(Contract):
@@ -69,6 +83,6 @@ def load_settings(path: str | Path | None = None) -> Settings:
 
 def demo_settings(database: Path | None = None) -> Settings:
     return Settings(
-        database=database or DEFAULT_DB.with_name("demo.sqlite3"),
+        database=database or _default_database("demo.sqlite3"),
         providers={name: ProviderConfig(kind="mock") for name in ("alpha", "beta", "gamma")},
     )

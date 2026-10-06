@@ -17,3 +17,8 @@ council.toml
 *.sqlite*
 *.db*
 .DS_Store
+
+# Local Web authentication/profile and Buzz delivery state
+*.web.json
+*.web-profile.json
+buzz-delivery/

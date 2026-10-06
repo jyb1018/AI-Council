@@ -55,6 +55,19 @@ def parser() -> argparse.ArgumentParser:
     serve = commands.add_parser("serve", help="Run the MCP stdio server")
     serve.add_argument("--demo", action="store_true", help="Use simulated providers only")
     serve.add_argument("--database", type=Path, help="Override the database path")
+    web = commands.add_parser("web", help="Run the local authenticated chat/settings UI")
+    web.add_argument("--demo", action="store_true")
+    web.add_argument("--database", type=Path)
+    web.add_argument("--port", type=int, default=8765)
+    web.add_argument("--endpoint", type=Path, help="Private endpoint descriptor for the Buzz bridge")
+    web.add_argument("--open", action="store_true", dest="open_browser")
+    buzz = commands.add_parser("buzz-acp", help="Buzz custom ACP runtime; requires a running Web server")
+    buzz.add_argument("--endpoint", type=Path, required=True)
+    buzz.add_argument("--channel", required=True, help="Explicit Buzz channel UUID; other rooms are rejected")
+    buzz.add_argument("--buzz-binary", default="/Applications/Buzz.app/Contents/MacOS/buzz")
+    buzz_config = commands.add_parser("buzz-config", help="Print a Buzz custom harness definition (no credentials)")
+    buzz_config.add_argument("--endpoint", type=Path, required=True)
+    buzz_config.add_argument("--channel", required=True)
     commands.add_parser("doctor", help="Check CLI capabilities/authentication without running model inference")
     demo = commands.add_parser("demo", help="Run a labelled three-provider simulation; no account required")
     demo.add_argument("question", nargs="?", default="Should a personal state service start with SQLite?")
@@ -103,6 +116,24 @@ async def doctor(settings) -> int:
 
 
 async def run(args, settings) -> int:
+    if args.command == "web":
+        from .web import serve_web
+        await serve_web(settings, port=args.port,
+                        endpoint=args.endpoint or settings.database.with_suffix(".web.json"),
+                        open_browser=args.open_browser)
+        return 0
+    if args.command == "buzz-config":
+        from uuid import UUID
+        channel = str(UUID(args.channel))
+        emit({"id": "ai-council", "label": "AI-Council", "command": sys.executable,
+              "args": ["-m", "ai_council", "buzz-acp", "--endpoint", str(args.endpoint.expanduser().resolve()),
+                       "--channel", channel], "env": {},
+              "installHint": "Start ai-council web first; keep Buzz access owner-only."})
+        return 0
+    if args.command == "buzz-acp":
+        from .buzz import Bridge
+        await Bridge(args.endpoint.expanduser(), args.channel, args.buzz_binary).run()
+        return 0
     if args.command == "doctor":
         return await doctor(settings)
     if args.command in ("status", "result", "export"):
@@ -153,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     logging.basicConfig(stream=sys.stderr, level=logging.WARNING, format="%(levelname)s %(message)s")
     def report(error: dict) -> None:
-        if args.command == "serve":
+        if args.command in ("serve", "buzz-acp"):
             print(json.dumps({"error": error}), file=sys.stderr)
         else:
             emit({"error": error})

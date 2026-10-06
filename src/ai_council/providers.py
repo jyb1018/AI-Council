@@ -104,6 +104,8 @@ def build_command(config: ProviderConfig, prompt: Prompt, workspace: Path, binar
                 "--output-schema", str(schema_path)]
         if config.model:
             args += ["--model", config.model]
+        if config.reasoning_effort:
+            args += ["-c", "model_reasoning_effort=" + json.dumps(config.reasoning_effort)]
         return args + ["-"], prompt.render()
     if config.kind == "claude":
         args = [binary, "-p", "--safe-mode", "--tools", "", "--disallowedTools", "mcp__*",
@@ -112,11 +114,15 @@ def build_command(config: ProviderConfig, prompt: Prompt, workspace: Path, binar
                 "--output-format", "json", "--json-schema", json.dumps(prompt.schema)]
         if config.model:
             args += ["--model", config.model]
+        if config.reasoning_effort:
+            args += ["--effort", config.reasoning_effort]
         return args, prompt.render()
     args = [binary, "--input-format", "stream-json", "--output-format", "stream-json",
             "--json-schema", str(schema_path)]
     if config.model:
         args += ["--model", config.model]
+    if config.reasoning_effort:
+        args += ["--effort", config.reasoning_effort]
     stdin = json.dumps({"event": "user", "message": {"content": prompt.render()}}, ensure_ascii=False) + "\n"
     return args, stdin
 

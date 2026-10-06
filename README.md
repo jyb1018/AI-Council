@@ -33,9 +33,21 @@ python -m pip install -e '.[dev]'
 ai-council demo 'Personal State OS는 SQLite로 시작해도 될까요?'
 ```
 
-`demo`는 세 모의 제공자로 10회 호출을 수행하며 실제 CLI나 네트워크를 사용하지 않습니다. 결과 JSON에서 `status: completed`, `simulated: true`, `attempts: 10`을 확인해 주세요. 기본 모의 DB는 `~/.local/share/ai-council/demo.sqlite3`입니다.
+`demo`는 세 모의 제공자로 10회 호출을 수행하며 실제 CLI나 네트워크를 사용하지 않습니다. 결과 JSON에서 `status: completed`, `simulated: true`, `attempts: 10`을 확인해 주세요. 새 기본 모의 DB는 macOS에서 `~/Library/Application Support/ai-council/demo.sqlite3`, Linux/WSL에서 `~/.local/share/ai-council/demo.sqlite3`입니다. macOS에서도 기존 `~/.local/share/ai-council/demo.sqlite3`가 있으면 그 파일을 계속 사용합니다.
+
+저장 경로에 쓰기 권한이 없으면 `database_permissions` 오류가 표시됩니다. `ai-council demo --database "$PWD/.council/demo.sqlite3"`처럼 쓰기 가능한 경로를 명시할 수 있습니다.
 
 PyPI에는 이 저장소 버전을 게시하지 않았습니다. 위처럼 저장소에서 설치해 주세요. 네이티브 Windows는 지원하지 않으며 WSL을 사용해 주세요.
+
+## 채팅방형 Web UI와 Buzz
+
+```bash
+ai-council web --demo --database "$PWD/.council/web-demo.sqlite3" --open
+```
+
+참여자별 모델·추론 수준, 비평·수정 라운드, 종합 담당을 선택하고 토론을 시작할 수 있습니다. 검증된 각 답변을 전체 토론 완료 전에 표시하며 중지·기록 재조회도 지원합니다. 실제 CLI 목록을 조회하므로 모델마다 서로 다른 추론 옵션을 보존합니다.
+
+설치형 Buzz에는 사용자 정의 ACP 런타임으로 연결합니다. 채팅방에서 질문하고 각 LLM 의견을 받으며, 참여자 설정은 로컬 Web 화면을 사용합니다. 로컬 UI·ACP 경계와 **실제 Buzz 채널의 모의 토론 및 Codex·Claude 운영 토론(실제 7회 호출, 답글 9건)을 검증했습니다.** [연결 방법·현재 제한](docs/buzz.md)을 참고해 주세요.
 
 ## 2. 실제 구독 연결하기
 
@@ -154,7 +166,7 @@ CLI 토론은 완료까지 기다린 뒤 JSON을 출력합니다. `Ctrl+C`는 �
 
 기본 CLI 호출 제한 시간은 300초, 전체 세션 제한은 1,800초입니다. 프롬프트는 최대 120,000자이며 초과하면 실패합니다. 답변·비평을 몰래 잘라내지 않습니다. stdout와 stderr 합산 최대 1 MiB를 넘기면 프로세스 그룹을 종료합니다.
 
-SQLite는 한 DB당 한 writer만 허용합니다. 이미 MCP 서버가 실행 중이면 별도 CLI 실행은 다른 DB를 쓰거나 MCP 도구를 사용해 주세요. `status/result/export` 읽기는 동시에 가능합니다. 기본 실제 DB는 `~/.local/share/ai-council/council.sqlite3`이며 예시 설정은 저장소 아래 `.council/state.sqlite3`를 사용합니다.
+SQLite는 한 DB당 한 writer만 허용합니다. 이미 MCP 서버가 실행 중이면 별도 CLI 실행은 다른 DB를 쓰거나 MCP 도구를 사용해 주세요. `status/result/export` 읽기는 동시에 가능합니다. 새 기본 실제 DB는 macOS에서 `~/Library/Application Support/ai-council/council.sqlite3`, Linux/WSL에서 `~/.local/share/ai-council/council.sqlite3`입니다. macOS에서도 기존 `~/.local/share/ai-council/council.sqlite3`가 있으면 그 파일을 계속 사용하며 자동 이동하지 않습니다. 실제 DB와 모의 DB는 각 파일의 존재 여부로 독립적으로 선택합니다. 명시적 설정은 이 기본 경로보다 우선하며, 예시 설정은 저장소 아래 `.council/state.sqlite3`를 사용합니다.
 
 **DB는 암호화되지 않습니다.** 질문·자료·응답이 평문으로 저장됩니다. 파일 권한은 0600으로 제한하지만 같은 사용자·관리자의 접근을 차단하지는 않습니다. 로그에는 원문 CLI 오류나 토큰을 남기지 않으며 인증 환경변수는 allowlist에서 제외합니다. 단, 공식 CLI는 본인 설정과 인증 저장소를 읽습니다. 이것은 강한 OS 샌드박스가 아닙니다. 자세한 위협 모델은 [SECURITY.md](SECURITY.md)를 읽어 주세요.
 

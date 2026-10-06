@@ -1,6 +1,6 @@
 # Security policy and deployment boundary
 
-AI-Council v1 is a **single-user, local stdio service**, not a multi-tenant hosted gateway. Do not expose it directly to a public tunnel or attach it to untrusted clients. An authorized MCP client can submit paid/limited provider work, view completed local discussions, and cancel jobs.
+AI-Council v1 is a **single-user local service (MCP stdio, optional authenticated loopback Web UI)**, not a multi-tenant hosted gateway. Do not expose it directly to a public tunnel or attach it to untrusted clients. An authorized MCP client can submit paid/limited provider work, view completed local discussions, and cancel jobs.
 
 ## What is enforced
 
@@ -19,3 +19,11 @@ The user must review subscription eligibility and extra-credit billing. Environm
 ## Reporting
 
 Do not post credentials, private transcripts, database files, or exploit details in a public issue. Use GitHub private vulnerability reporting when enabled. If it is not enabled, open a minimal issue asking the maintainer for a private reporting channel without sensitive details. Include the version and affected component once a private channel is available.
+
+## Optional Web/Buzz boundary
+
+The Web observer intentionally exposes intermediate validated replies and aliases to its bearer-token holder; existing MCP result sealing remains unchanged. Its randomly generated token is stored in a 0600 endpoint descriptor and in the browser tab sessionStorage. It is not a provider credential. Do not publish authentication links or descriptors, bind a reverse proxy, or share the endpoint with untrusted local processes. Same-OS-user access is outside this boundary.
+
+Enabling the Buzz bridge additionally sends the question and validated opinions to the configured Buzz room/relay, where room membership and relay retention apply. Keep the agent owner-only and use a dedicated channel. The bridge accepts only that channel, uses the current event for reply routing, and neutralizes notification syntax in generated text. It invokes the official Buzz CLI without a shell, using only explicitly injected Buzz identity environment fields; those fields never enter model workers or the Web process. It does not read Buzz's credential store or complete account/key setup.
+
+Web profiles, endpoint descriptors and `buzz-delivery/` journals are additional local files. Stop the service before removing them. Removing delivery journals can make a repeated event publish again. A crash after external publication but before receipt commit can also duplicate a post; external exactly-once delivery is not claimed. If the local Web service becomes unreachable, the bridge reports that cancellation could not be confirmed; inspect the Web process before retrying.

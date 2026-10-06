@@ -51,6 +51,10 @@ class Store:
             self.db.execute("PRAGMA foreign_keys=ON")
             if not read_only:
                 self._initialize()
+        except PermissionError as exc:
+            self.close()
+            raise CouncilError("database_permissions", "Cannot access the Council database path. "
+                               "Choose a writable path using --database or explicit configuration.") from exc
         except sqlite3.Error as exc:
             self.close()
             raise CouncilError("database", "Cannot open the Council database; check the path, permissions, and file integrity.") from exc
