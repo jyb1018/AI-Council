@@ -1,0 +1,27 @@
+{
+  "schema_version": 3,
+  "version": "3.0.0",
+  "profile": "sol",
+  "core_status": "managed_block",
+  "agents": {
+    "mode": "managed_block",
+    "sha256": "3e346718ff0a34395fd5813bfc1ca222a15fa84ee6be00ba73ac81d467376131"
+  },
+  "files": {
+    ".agents/skills/uh-debug/SKILL.md": "54397f8ba63b2d0fa2706c9bae3475bcf2d81270bfc7560c362c1a4efc3cb5fe",
+    ".agents/skills/uh-developer-context-sync/SKILL.md": "35db9695ec25b6762fa174907c88739433bf87183a3b5604f9443b96fd735167",
+    ".agents/skills/uh-human-diagramming/SKILL.md": "983f4c0855ded9b5b2e9d76350d325a1b8d03ff17055fb8cab208d8b07b9e386",
+    ".agents/skills/uh-integration/SKILL.md": "a8a41545d01fd7b2e14fa52fc80ff2a15099bed34f969a3840cf060481039cae",
+    ".agents/skills/uh-karpathy/SKILL.md": "9d274d2be49340550f90eafe17e601d9b8c85e9a16c84b820c30697998b5280c",
+    ".agents/skills/uh-model-upgrade/SKILL.md": "54870a5be7dea71145922a8320fb22150f1c1c1b20764178aeeb8bc38f4bbad5",
+    ".agents/skills/uh-ponytail/SKILL.md": "e98365d92f5aec54c501f71a8b2d7e83865afa157fbb14c4923a85ba7acb9cbf",
+    ".agents/skills/uh-review/SKILL.md": "73ede96ee7b737d5d661c0d4890182078fed67f5117d46b18a3c4dc70add63c0",
+    ".agents/skills/uh-tdd/SKILL.md": "7e4ab2bd2497c94e5d9df7cd30f1d14068ecb697ea6c91480c30415411c58f79",
+    ".agents/skills/uh-tooling/SKILL.md": "cf3d992ddf6178d5682479af33c935a73948a19161d86c280c63b80462d94191",
+    ".universal-harness/CORE.md": "956dccdc935287f97b6bf81c23d4482d410f2d55454bc678210352e3defee76a",
+    ".universal-harness/TOOLING.md": "7296c643b016280b66c95cc3fc00e3ab43d33f2145fcd2f0208bf393373edb64",
+    ".universal-harness/profile.md": "106d9117f7dc7e880497e4b20e632d36e80d5b908c778aee77d9867fc2e78aa2",
+    ".universal-harness/tooling.json": "ed7571ea04229508783de87244e729dcc17f36dd129f2d721fc24c10210344c2",
+    ".universal-harness/tooling.py": "cfcd6b0cd084a27b85ca24aa62933ab3a62366c2d281b9f9b80b5571de107bfc"
+  }
+}

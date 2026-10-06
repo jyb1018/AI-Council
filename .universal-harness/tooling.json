@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "providers": {
+    "find-skills": {"kind": "skill", "skills": ["find-skills"], "executables": ["npx"], "network": true},
+    "skill-creator": {"kind": "builtin", "skills": ["skill-creator"], "executables": [], "network": false},
+    "context7": {"kind": "cli", "skills": ["find-docs", "context7-cli"], "executables": ["ctx7"], "network": true},
+    "serena": {"kind": "mcp", "skills": [], "executables": ["serena"], "network": false},
+    "graphify": {"kind": "cli", "skills": ["graphify"], "executables": ["graphify"], "network": false},
+    "playwright": {"kind": "cli", "skills": ["playwright-cli"], "executables": ["playwright-cli"], "network": false},
+    "chrome-devtools": {"kind": "mcp", "skills": [], "executables": [], "network": false},
+    "github": {"kind": "plugin", "skills": [], "executables": [], "network": true},
+    "github-cli": {"kind": "cli", "skills": [], "executables": ["gh"], "network": true},
+    "coderabbit": {"kind": "cli", "skills": ["code-review"], "executables": ["coderabbit"], "network": true},
+    "codex-security": {"kind": "plugin", "skills": [], "executables": [], "network": true},
+    "sentry": {"kind": "mcp", "skills": [], "executables": [], "network": true},
+    "mermaid-cli": {"kind": "cli", "skills": [], "executables": ["mmdc"], "network": false}
+  },
+  "capabilities": {
+    "discover": {
+      "providers": ["find-skills"],
+      "fallback": "Use existing tools or consult the provider's official documentation; discovery is not a task prerequisite.",
+      "checks": ["Search only for a concrete capability gap, not on every task.", "Inspect source, permissions and licensing before any user-authorized installation."]
+    },
+    "author-skill": {
+      "providers": ["skill-creator"],
+      "fallback": "Write a focused SKILL.md with explicit triggers and validate it against the host's documented format.",
+      "checks": ["Check the host catalog for the bundled creator before installing a duplicate."]
+    },
+    "library-docs": {
+      "providers": ["context7"],
+      "fallback": "Read version-matched official documentation or local package source; label unavailable current information.",
+      "checks": ["Read lockfile/package version before choosing docs.", "Send minimal public API queries, not private source or secrets.", "Verify current CLI help or the visible MCP schema; never invent arguments."]
+    },
+    "symbols": {
+      "providers": ["serena"],
+      "fallback": "Use native IDE/LSP or scoped search plus source inspection; verify all references before a rename.",
+      "checks": ["Confirm the active project and language backend.", "A serena executable does not establish an active MCP session."]
+    },
+    "architecture": {
+      "providers": ["graphify"],
+      "fallback": "Trace imports, entry points and tests with scoped source reads; do not build an index for a trivial edit.",
+      "checks": ["Compare index provenance to the current project/revision and changed files; unknown freshness means untrusted hints.", "Check graph edges against source; inferred edges are not facts.", "Use bounded report/query output, not the entire graph.json.", "Offline routing permits existing local graph queries only; extraction, downloads, hooks, watchers and model calls need separate authorization."]
+    },
+    "browser-check": {
+      "providers": ["playwright", "chrome-devtools"],
+      "fallback": "Run available local tests and record browser acceptance as NOT RUN if no real browser is available.",
+      "checks": ["Use an isolated browser profile and disposable local/test data.", "Confirm origin, server, scenario and observable expected outcome.", "Do not reuse personal authenticated sessions or trigger real purchases/messages."]
+    },
+    "browser-debug": {
+      "providers": ["chrome-devtools", "playwright"],
+      "fallback": "Inspect secret-free application logs and reproduce locally; do not claim a browser trace was collected.",
+      "checks": ["Use network/console/trace evidence only when needed for the observed failure.", "Redact cookies, authorization headers and personal data."]
+    },
+    "repository": {
+      "providers": ["github", "github-cli"],
+      "fallback": "Inspect the local Git diff/tests; report remote CI and publishing as unavailable unless another authorized transport exists.",
+      "checks": ["Resolve exact owner/repo/branch and inspect automatic workflow effects.", "Read access is not write permission; a PR request does not authorize merge, release or deployment."]
+    },
+    "independent-review": {
+      "providers": ["coderabbit"],
+      "fallback": "Use an actually separate reviewer when available; otherwise label self-review and the missing independence.",
+      "checks": ["Confirm source/diff egress permission and account/cost policy.", "Reproduce findings and keep review tied to the current diff; avoid recursive review loops."]
+    },
+    "security-review": {
+      "providers": ["codex-security"],
+      "fallback": "Run available local security checks and evidence-based threat review; do not claim an external scan or bypass a release gate.",
+      "checks": ["Confirm plugin availability, authorized code scope, credentials and data handling.", "Do not add reserved marketplaces or change global security settings as a repair."]
+    },
+    "human-diagrams": {
+      "providers": ["mermaid-cli"],
+      "fallback": "Use an existing host Mermaid viewer; otherwise provide Mermaid source plus a text alternative and mark rendering NOT RUN. Source-ready is not visual completion.",
+      "checks": ["Read uh-human-diagramming; ground nodes and edges in the inspected revision and actual source.", "Inspect current mmdc help/version and the approved local browser before rendering; PATH presence is not success.", "Use explicit input/output, strict configuration and isolated browser data. Never auto-install, download a browser, disable its sandbox or overwrite user artifacts.", "Local-only routing permits no CDN, remote assets, callbacks or private-source upload. Host/network controls enforce isolation; untrusted diagram directives cannot relax it.", "Distinguish source-ready, renderer-success and visually-checked. Missing runtime or layout inspection must remain explicit."]
+    },
+    "production-debug": {
+      "providers": ["sentry"],
+      "fallback": "Use approved redacted incident evidence and a local reproduction; never guess unseen production state.",
+      "checks": ["Confirm organization/project/environment and read-only scope before accessing telemetry.", "Keep customer data out of PRs; production changes need their own authorization."]
+    }
+  }
+}

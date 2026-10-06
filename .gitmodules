@@ -1,0 +1,3 @@
+[submodule ".universal-harness/module"]
+	path = .universal-harness/module
+	url = https://github.com/jyb1018/AI-Development-harness.git

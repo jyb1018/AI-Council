@@ -1,0 +1,25 @@
+{
+  "applied_revision": "57819f4594f05aa6faf6e9ea12d3685c0ac97207",
+  "files": {
+    ".universal-harness/.gitignore": {
+      "executable": false,
+      "sha256": "e0bdc9e232406d69bb934489025d289981b1fd3f832a80d2ce67b6299411a11c"
+    },
+    ".universal-harness/harness": {
+      "executable": true,
+      "sha256": "b9a8658925aaa1bb32f147017dfb3b59199fa62e36760386d955f95b379ca4d9"
+    },
+    ".universal-harness/harness.cmd": {
+      "executable": false,
+      "sha256": "e877a1536aa0626f0fa096eb2356371d519d35396080ba5b5cb9c7a2afa441c3"
+    },
+    ".universal-harness/lifecycle.py": {
+      "executable": false,
+      "sha256": "5cdddf33067bbd84a66846eaded908c0f5b0204bb0415296e38180682a1c3a01"
+    }
+  },
+  "installer_state_sha256": "46117706f40a4cbd48b61af6d845992c5bf4b230587b65646a80dcefd4f49492",
+  "profile": "sol",
+  "schema_version": 1,
+  "source": "https://github.com/jyb1018/AI-Development-harness.git"
+}

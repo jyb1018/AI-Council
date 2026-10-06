@@ -1,0 +1,5 @@
+#!/bin/sh
+# The installed runtime stays stable across source-only pulls. No global PATH edit.
+set -eu
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec python3 "$HERE/lifecycle.py" --project "$HERE/.." "$@"
